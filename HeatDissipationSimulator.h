@@ -115,6 +115,7 @@ int printMatrix(float **&matrix, int X_dimension, int Y_dimension)
         cout << endl;
     }
     cout << endl;
+    return 0;
 }
 
 // Function to set boundary values in the matrix
