@@ -107,6 +107,25 @@ int main()
         }
         stimulateGrid(matrix, X_dimension, Y_dimension, X_coordinate, Y_coordinate, temp);
 
+        cout << "Keep in mind that the matrix can be too large for the screen!!!" << endl;
+        cout << "Would you like to see the initial matrix? (y/n): ";
+        char show;
+        cin >> show;
+        if (show == 'y')
+        {
+            printMatrix(matrix, X_dimension, Y_dimension);
+        }
+        else if (show == 'n')
+        {
+        }
+        else
+        {
+            cout << "Invalid input!" << endl;
+            cout << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
         // Initial Bitmap
         string filename = "Initial";
         string input;
@@ -142,10 +161,29 @@ int main()
         cout << endl;
         cout << "Simulation in progress..." << endl;
         cout << "It may take some time. Grab yourself a coffee" << endl;
+
         int timeTaken = SimulateThermalDissipation(matrix, X_dimension, Y_dimension, threshold);
         cout << "Simulation successful !!!" << endl;
         cout << "The simulation took " << timeTaken << " seconds" << endl;
         cout << endl;
+
+        cout << "Keep in mind that the matrix can be too large for the screen!!!" << endl;
+        cout << "Would you like to see the initial matrix? (y/n): ";
+        cin >> show;
+        if (show == 'y')
+        {
+            printMatrix(matrix, X_dimension, Y_dimension);
+        }
+        else if (show == 'n')
+        {
+        }
+        else
+        {
+            cout << "Invalid input!" << endl;
+            cout << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
 
         // Final Bitmap
         filename = "Final";
