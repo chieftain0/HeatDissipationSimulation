@@ -1,233 +1,183 @@
-#include <iostream>
-#include <iomanip>
-#include <cmath>
+#include <bits/stdc++.h>
+#include "Bitmap_Helper.h"
+#include "HeatDissipationSimulator.h"
 using namespace std;
 
-// Function to create a 2D float matrix with given dimensions
-float **createMatrix(int X_dimension, int Y_dimension)
+// The functions are written to be idiot-proof, but main() still makes preliminary input checks
+int main()
 {
-    if (X_dimension <= 0 || Y_dimension <= 0)
+    cout << "Hello User" << endl;
+    cout << "This program simulates heat distribution in 2D metallic objects" << endl;
+    cout << "All values must be in Kelvins!!!" << endl;
+    cout << endl;
+    cout << "Start the program? (y/n): ";
+    char start;
+    cin >> start;
+    if (start == 'n')
     {
-        return nullptr; // Return nullptr for invalid dimensions
+        cout << "Goodbye User" << endl;
+        return 0;
     }
-
-    float **matrix = new float *[Y_dimension]; // Allocate memory for rows
-    for (int i = 0; i < Y_dimension; i++)
+    else if (start == 'y')
     {
-        matrix[i] = new float[X_dimension]; // Allocate memory for columns
-    }
-
-    // Initialize matrix elements to 0
-    for (int i = 0; i < Y_dimension; i++)
-    {
-        for (int j = 0; j < X_dimension; j++)
+        // Create a 2D surface
+        int X_dimension = -1, Y_dimension = -1;
+        while (X_dimension <= 0 || Y_dimension <= 0)
         {
-            matrix[i][j] = 0;
+            cout << "Enter the width (X) of the 2D surface: ";
+            cin >> X_dimension;
+            cout << "Enter the height (Y) of the 2D surface: ";
+            cin >> Y_dimension;
+            if (X_dimension <= 0 || Y_dimension <= 0)
+            {
+                cout << "Invalid dimensions!" << endl;
+                cout << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
         }
-    }
-    return matrix;
-}
-
-// Function to delete a 2D float matrix and free memory
-int deleteMatrix(float **matrix, int X_dimension, int Y_dimension)
-{
-    for (int i = 0; i < Y_dimension; i++)
-    {
-        delete[] matrix[i]; // Free memory for each row
-    }
-    delete[] matrix; // Free memory for the array of rows
-
-    return 0;
-}
-
-// Overloaded function to delete a 2D uint8_t matrix and free memory
-int deleteMatrix(uint8_t **matrix, int X_dimension, int Y_dimension)
-{
-    for (int i = 0; i < Y_dimension; i++)
-    {
-        delete[] matrix[i]; // Free memory for each row
-    }
-    delete[] matrix; // Free memory for the array of rows
-
-    return 0;
-}
-
-// Function to print the 2D float matrix with indices
-int printMatrix(float **matrix, int X_dimension, int Y_dimension)
-{
-    if (X_dimension <= 0 || Y_dimension <= 0)
-    {
-        return -1; // Return error for invalid dimensions
-    }
-
-    // Print column indices
-    cout << "    ";
-    for (int i = 0; i < X_dimension; i++)
-    {
-        cout << setw(10) << i << " ";
-    }
-    cout << endl;
-
-    // Print row separator
-    cout << "   ";
-    for (int i = 0; i < X_dimension; i++)
-    {
-        cout << "___________";
-    }
-    cout << endl;
-
-    // Print matrix with row indices
-    for (int i = 0; i < Y_dimension; i++)
-    {
-        cout << i << " | ";
-        for (int j = 0; j < X_dimension; j++)
+        float **matrix;
+        if (createMatrix(matrix, X_dimension, Y_dimension) == 0)
         {
-            cout << setw(10) << matrix[i][j] << " ";
+            cout << "The 2D surface matrix has been created!!!" << endl;
+            cout << endl;
+        }
+        else
+        {
+            cout << "Failed to create the 2D surface matrix!!!" << endl;
+            cout << endl;
+            return -1;
+        }
+
+        // Set boundary values
+        cout << "Now the program will prompt you to set the boundary temperatures" << endl;
+
+        string BoundaryNames[4] = {"top", "bottom", "left", "right"};
+        float BoundaryTemperatures[4] = {-1, -1, -1, -1};
+
+        for (int i = 0; i < 4; i++)
+        {
+            while (BoundaryTemperatures[i] <= 0)
+            {
+                cout << "Enter the temperature of the " << BoundaryNames[i] << " boundary: ";
+                cin >> BoundaryTemperatures[i];
+                if (BoundaryTemperatures[i] <= 0)
+                {
+                    cout << "Invalid temperature!" << endl;
+                    cout << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+            }
+        }
+        SetBoundaryValues(matrix, X_dimension, Y_dimension, BoundaryTemperatures[0], BoundaryTemperatures[1], BoundaryTemperatures[2], BoundaryTemperatures[3]);
+        cout << "The boundary temperatures have been set!!!" << endl;
+        cout << endl;
+
+        // Stimulate
+        cout << "Now the programm will prompt the coordinates of the stimulation point" << endl;
+        float temp = -1;
+        int X_coordinate = -1, Y_coordinate = -1;
+        while (X_coordinate <= 0 || X_coordinate >= X_dimension - 1 || Y_coordinate <= 0 || Y_coordinate >= Y_dimension - 1)
+        {
+            cout << "Enter the X coordinate of the stimulation point: ";
+            cin >> X_coordinate;
+            cout << "Enter the Y coordinate of the stimulation point: ";
+            cin >> Y_coordinate;
+            if (X_coordinate <= 0 || X_coordinate >= X_dimension - 1 || Y_coordinate <= 0 || Y_coordinate >= Y_dimension - 1)
+            {
+                cout << "Invalid cordinates!" << endl;
+                cout << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }
+
+        while (temp <= 0)
+        {
+            cout << "Enter the set temperature of the stimulation point: ";
+            cin >> temp;
+            if (temp <= 0)
+            {
+                cout << "Invalid temperature!" << endl;
+                cout << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }
+        stimulateGrid(matrix, X_dimension, Y_dimension, X_coordinate, Y_coordinate, temp);
+
+        // Initial Bitmap
+        string filename = "Initial";
+        string input;
+        cout << "Enter the name for the bitmap file without extension (use ! to use the default name '" << filename << "'): ";
+        cin >> input;
+        if (input != "!")
+        {
+            filename = input;
+        }
+        uint8_t **EightBitMatrix;
+        createMatrix(EightBitMatrix, X_dimension, Y_dimension);
+        MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
+        writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
+        cout << "The bitmap file " << filename << " has been created!!!" << endl;
+        cout << endl;
+        deleteMatrix(EightBitMatrix, X_dimension, Y_dimension);
+
+        // Simulate thermal dissipation
+        cout << "Now the program will prompt the simulation threshold to simulate the thermal dissipation" << endl;
+        float threshold = -1;
+        while (threshold <= 0)
+        {
+            cout << "Enter the simulation threshold: ";
+            cin >> threshold;
+            if (threshold <= 0)
+            {
+                cout << "Invalid threshold!" << endl;
+                cout << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
         }
         cout << endl;
-    }
-}
+        cout << "Simulation in progress..." << endl;
+        cout << "It may take some time. Grab yourself a coffee" << endl;
+        int timeTaken = SimulateThermalDissipation(matrix, X_dimension, Y_dimension, threshold);
+        cout << "Simulation successful !!!" << endl;
+        cout << "The simulation took " << timeTaken << " seconds" << endl;
+        cout << endl;
 
-// Function to set boundary values in the matrix
-int SetBoundaryValues(float **matrix, int X_dimension, int Y_dimension, float top, float bottom, float left, float right)
-{
-    if (X_dimension <= 0 || Y_dimension <= 0)
-    {
-        return -1; // Return error for invalid dimensions
-    }
-
-    if (top <= 0 || bottom <= 0 || left <= 0 || right <= 0)
-    {
-        return -2; // Return error for invalid boundary values
-    }
-
-    // Set top and bottom boundaries
-    for (int i = 0; i < X_dimension; i++)
-    {
-        matrix[0][i] = top;
-        matrix[Y_dimension - 1][i] = bottom;
-    }
-
-    // Set left and right boundaries
-    for (int i = 1; i < Y_dimension - 1; i++)
-    {
-        matrix[i][0] = left;
-        matrix[i][X_dimension - 1] = right;
-    }
-    return 0;
-}
-
-// Function to set a specific temperature in the matrix at given coordinates
-int stimulateGrid(float **matrix, int X_dimension, int Y_dimension, int X_coordinate, int Y_coordinate, float temp)
-{
-    if (X_dimension <= 0 || Y_dimension <= 0)
-    {
-        return -1; // Return error for invalid dimensions
-    }
-
-    if (temp <= 0)
-    {
-        return -2; // Return error for invalid temperature
-    }
-
-    if (X_coordinate <= 0 || X_coordinate >= X_dimension - 1 || Y_coordinate < 0 || Y_coordinate >= Y_dimension - 1)
-    {
-        return -3; // Return error for invalid coordinates
-    }
-
-    matrix[Y_coordinate][X_coordinate] = temp;
-    return 0;
-}
-
-// Function to simulate thermal dissipation in the matrix until stability is reached
-int SimulateThermalDissipation(float **matrix, int X_dimension, int Y_dimension, float threshold)
-{
-    if (X_dimension <= 0 || Y_dimension <= 0)
-    {
-        return -1; // Return error for invalid dimensions
-    }
-    if (threshold <= 0)
-    {
-        return -2; // Return error for invalid threshold
-    }
-
-    bool isStable = false;
-
-    time_t start, end;
-
-    time(&start);
-
-    // Create a dynamic 2D array for storing the previous temperature values
-    float **previousMatrix = createMatrix(X_dimension, Y_dimension);
-
-    while (!isStable)
-    {
-        isStable = true; // Assume stability until proven otherwise
-
-        // Iterate over the interior elements of the matrix
-        for (int X = 1; X < X_dimension - 1; X++)
+        // Final Bitmap
+        filename = "Final";
+        cout << "Enter the name for the bitmap file without extension (use ! to use the default name '" << filename << "'): ";
+        cin >> input;
+        if (input != "!")
         {
-            for (int Y = 1; Y < Y_dimension - 1; Y++)
-            {
-                // Calculate the new temperature based on surrounding values
-                double newTemperature = (matrix[Y - 1][X] + matrix[Y + 1][X] + matrix[Y][X - 1] + matrix[Y][X + 1]) / 4;
-
-                // Check for stability
-                if (abs(newTemperature - matrix[Y][X]) >= threshold)
-                {
-                    isStable = false; // The temperature has not stabilized
-                }
-
-                // Update the matrix with the new temperature
-                previousMatrix[Y][X] = matrix[Y][X];
-                matrix[Y][X] = newTemperature;
-            }
+            filename = input;
         }
+        createMatrix(EightBitMatrix, X_dimension, Y_dimension);
+        MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
+        writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
+        cout << "The bitmap file " << filename << " has been created!!!" << endl;
+        cout << endl;
+
+        // Delete allocated memory
+        deleteMatrix(EightBitMatrix, X_dimension, Y_dimension);
+        deleteMatrix(matrix, X_dimension, Y_dimension);
+
+        cout << "Program finished" << endl;
+        cout << "Restarting ..." << endl;
+        cout << endl;
+        main();
     }
-
-    time(&end);
-
-    deleteMatrix(previousMatrix, X_dimension, Y_dimension);
-
-    return end - start; // Return the time taken for simulation
-}
-
-// Function to convert a 2D float matrix to an 8-bit matrix for visualization
-uint8_t **MatrixFloatTo8bit(float **matrix, int X_dimension, int Y_dimension)
-{
-    float MaxTemp = -1;
-    float MinTemp = 999999999;
-
-    if (X_dimension <= 0 || Y_dimension <= 0)
+    else
     {
-        return nullptr; // Return nullptr for invalid dimensions
-    }
+        cout << "Invalid input" << endl;
+        cout << endl;
 
-    // Find the maximum and minimum temperatures in the matrix
-    for (int i = 0; i < Y_dimension; i++)
-    {
-        for (int j = 0; j < X_dimension; j++)
-        {
-            if (matrix[i][j] > MaxTemp)
-            {
-                MaxTemp = matrix[i][j];
-            }
-            if (matrix[i][j] < MinTemp)
-            {
-                MinTemp = matrix[i][j];
-            }
-        }
-    }
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    // Create an 8-bit matrix and scale temperatures accordingly
-    uint8_t **copiedMatrix = new uint8_t *[Y_dimension];
-    for (int i = 0; i < Y_dimension; i++)
-    {
-        copiedMatrix[i] = new uint8_t[X_dimension];
-        for (int j = 0; j < X_dimension; j++)
-        {
-            copiedMatrix[i][j] = static_cast<uint8_t>((matrix[i][j] - MinTemp) / (MaxTemp - MinTemp) * 255);
-        }
+        main();
     }
-    return copiedMatrix;
 }
