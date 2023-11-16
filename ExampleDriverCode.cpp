@@ -36,9 +36,18 @@ int main()
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
         }
-        float **matrix = createMatrix(X_dimension, Y_dimension);
-        cout << "The 2D surface matrix has been created!!!" << endl;
-        cout << endl;
+        float **matrix;
+        if (createMatrix(matrix, X_dimension, Y_dimension) == 0)
+        {
+            cout << "The 2D surface matrix has been created!!!" << endl;
+            cout << endl;
+        }
+        else
+        {
+            cout << "Failed to create the 2D surface matrix!!!" << endl;
+            cout << endl;
+            return -1;
+        }
 
         // Set boundary values
         cout << "Now the program will prompt you to set the boundary temperatures" << endl;
@@ -107,7 +116,9 @@ int main()
         {
             filename = input;
         }
-        uint8_t **EightBitMatrix = MatrixFloatTo8bit(matrix, X_dimension, Y_dimension);
+        uint8_t **EightBitMatrix;
+        createMatrix(EightBitMatrix, X_dimension, Y_dimension);
+        MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
         writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
         cout << "The bitmap file " << filename << " has been created!!!" << endl;
         cout << endl;
@@ -144,7 +155,8 @@ int main()
         {
             filename = input;
         }
-        EightBitMatrix = MatrixFloatTo8bit(matrix, X_dimension, Y_dimension);
+        createMatrix(EightBitMatrix, X_dimension, Y_dimension);
+        MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
         writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
         cout << "The bitmap file " << filename << " has been created!!!" << endl;
         cout << endl;
