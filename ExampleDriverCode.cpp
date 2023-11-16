@@ -139,7 +139,7 @@ int main()
         createMatrix(EightBitMatrix, X_dimension, Y_dimension);
         MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
         writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
-        cout << "The bitmap file " << filename << " has been created!!!" << endl;
+        cout << "The bitmap file " << filename << ".bmp has been created!!!" << endl;
         cout << endl;
         deleteMatrix(EightBitMatrix, X_dimension, Y_dimension);
 
@@ -196,7 +196,7 @@ int main()
         createMatrix(EightBitMatrix, X_dimension, Y_dimension);
         MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
         writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
-        cout << "The bitmap file " << filename << " has been created!!!" << endl;
+        cout << "The bitmap file " << filename << ".bmp has been created!!!" << endl;
         cout << endl;
 
         // Delete allocated memory
