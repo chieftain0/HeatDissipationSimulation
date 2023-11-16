@@ -85,6 +85,9 @@ int printMatrix(float **&matrix, int X_dimension, int Y_dimension)
         return -1; // Return error for invalid dimensions
     }
 
+    // Set precision for floating-point numbers
+    cout << fixed << setprecision(2);
+
     // Print column indices
     cout << "    ";
     for (int i = 0; i < X_dimension; i++)
@@ -111,6 +114,7 @@ int printMatrix(float **&matrix, int X_dimension, int Y_dimension)
         }
         cout << endl;
     }
+    cout << endl;
 }
 
 // Function to set boundary values in the matrix
@@ -244,7 +248,6 @@ int MatrixFloatTo8bit(float **&matrix, uint8_t **&eightBitMatrix, int X_dimensio
             }
         }
     }
-
 
     for (int i = 0; i < Y_dimension; i++)
     {
