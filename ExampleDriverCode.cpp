@@ -7,10 +7,10 @@ using namespace std;
 int main()
 {
     cout << "Hello User" << endl;
-    cout << "This program simulates a heat distribution in 2D metallic objects" << endl;
+    cout << "This program simulates heat distribution in 2D metallic objects" << endl;
     cout << "All values must be in Kelvins!!!" << endl;
     cout << endl;
-    cout << "Start the programm? (y/n): ";
+    cout << "Start the program? (y/n): ";
     char start;
     cin >> start;
     if (start == 'n')
