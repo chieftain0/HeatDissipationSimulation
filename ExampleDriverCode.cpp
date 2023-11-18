@@ -16,6 +16,7 @@ int main()
         cout << "Start the program? (y/n): ";
         char start;
         cin >> start;
+        cout << endl;
         // Initial input checks
         if (start == 'n')
         {
@@ -27,13 +28,13 @@ int main()
         {
             // Create a 2D surface
             int X_dimension = -1, Y_dimension = -1;
-            while (X_dimension <= 0 || Y_dimension <= 0) 
+            while (X_dimension <= 0 || Y_dimension <= 0)
             {
                 cout << "Enter the width (X) of the 2D surface: ";
                 cin >> X_dimension;
                 cout << "Enter the height (Y) of the 2D surface: ";
                 cin >> Y_dimension;
-                if (X_dimension <= 0 || Y_dimension <= 0) 
+                if (X_dimension <= 0 || Y_dimension <= 0)
                 {
                     cout << "Invalid dimensions!" << endl;
                     cout << endl;
@@ -111,6 +112,7 @@ int main()
                 }
             }
             stimulateGrid(matrix, X_dimension, Y_dimension, X_coordinate, Y_coordinate, temp);
+            cout << endl;
 
             cout << "Keep in mind that the matrix can be too large for the screen!!!" << endl;
             cout << "Would you like to see the initial matrix? (y/n): ";
@@ -130,6 +132,7 @@ int main()
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
+            cout << endl;
 
             // Simulate thermal dissipation
             cout << "Now the program will prompt the simulation threshold to simulate the thermal dissipation" << endl;
@@ -174,7 +177,7 @@ int main()
             }
 
             // Create a Bitmap image
-            uint8_t** EightBitMatrix= nullptr;
+            uint8_t **EightBitMatrix = nullptr;
             string filename = "HeatDissipationSimulation";
             string input;
             cout << "Enter the name for the bitmap file without extension (use ! to use the default name '" << filename << ".bmp'): ";
