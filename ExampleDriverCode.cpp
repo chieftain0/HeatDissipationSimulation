@@ -159,7 +159,7 @@ int main()
             cout << endl;
 
             cout << "Keep in mind that the matrix can be too large for the screen!!!" << endl;
-            cout << "Would you like to see the initial matrix? (y/n): ";
+            cout << "Would you like to see the final matrix? (y/n): ";
             cin >> show;
             if (show == 'y')
             {
@@ -175,6 +175,7 @@ int main()
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
+            cout << endl;
 
             // Create a Bitmap image
             uint8_t **EightBitMatrix = nullptr;
