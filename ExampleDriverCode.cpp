@@ -16,23 +16,24 @@ int main()
         cout << "Start the program? (y/n): ";
         char start;
         cin >> start;
+        // Initial input checks
         if (start == 'n')
         {
             cout << "Goodbye User" << endl;
             restart = false;
-            return 0;
+            return 0; // Exit the program
         }
         else if (start == 'y')
         {
             // Create a 2D surface
             int X_dimension = -1, Y_dimension = -1;
-            while (X_dimension <= 0 || Y_dimension <= 0)
+            while (X_dimension <= 0 || Y_dimension <= 0) 
             {
                 cout << "Enter the width (X) of the 2D surface: ";
                 cin >> X_dimension;
                 cout << "Enter the height (Y) of the 2D surface: ";
                 cin >> Y_dimension;
-                if (X_dimension <= 0 || Y_dimension <= 0)
+                if (X_dimension <= 0 || Y_dimension <= 0) 
                 {
                     cout << "Invalid dimensions!" << endl;
                     cout << endl;
@@ -78,7 +79,7 @@ int main()
             cout << "The boundary temperatures have been set!!!" << endl;
             cout << endl;
 
-            // Stimulate
+            // Stimulate a point
             cout << "Now the programm will prompt the coordinates of the stimulation point" << endl;
             float temp = -1;
             int X_coordinate = -1, Y_coordinate = -1;
@@ -130,23 +131,6 @@ int main()
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
 
-            // Initial Bitmap
-            string filename = "Initial";
-            string input;
-            cout << "Enter the name for the bitmap file without extension (use ! to use the default name '" << filename << "'): ";
-            cin >> input;
-            if (input != "!")
-            {
-                filename = input;
-            }
-            uint8_t **EightBitMatrix = nullptr;
-            createMatrix(EightBitMatrix, X_dimension, Y_dimension);
-            MatrixFloatTo8bit(matrix, EightBitMatrix, X_dimension, Y_dimension);
-            writeBitmap((filename + ".bmp").c_str(), EightBitMatrix, X_dimension, Y_dimension);
-            cout << "The bitmap file " << filename << ".bmp has been created!!!" << endl;
-            cout << endl;
-            deleteMatrix(EightBitMatrix, X_dimension, Y_dimension);
-
             // Simulate thermal dissipation
             cout << "Now the program will prompt the simulation threshold to simulate the thermal dissipation" << endl;
             float threshold = -1;
@@ -189,9 +173,11 @@ int main()
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
 
-            // Final Bitmap
-            filename = "Final";
-            cout << "Enter the name for the bitmap file without extension (use ! to use the default name '" << filename << "'): ";
+            // Create a Bitmap image
+            uint8_t** EightBitMatrix= nullptr;
+            string filename = "HeatDissipationSimulation";
+            string input;
+            cout << "Enter the name for the bitmap file without extension (use ! to use the default name '" << filename << ".bmp'): ";
             cin >> input;
             if (input != "!")
             {
