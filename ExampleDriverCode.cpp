@@ -209,7 +209,6 @@ int main()
         case '6':
             cout << "Goodbye User" << endl;
             deleteMatrix(matrix, X_dimension, Y_dimension);
-            system("pause");
             return 0;
             break;
 
