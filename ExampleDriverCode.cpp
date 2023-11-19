@@ -192,7 +192,7 @@ int main()
             }
             else if (show == 'n')
             {
-                break;
+                cout << "OK" << endl;
             }
             else
             {
