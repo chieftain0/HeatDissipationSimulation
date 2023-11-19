@@ -3,6 +3,26 @@
 #include <cmath>
 using namespace std;
 
+// Function to call the main menu
+char CallMainMenu()
+{
+    cout << "Main menu:" << endl;
+    cout << "1. Create a 2D surface" << endl;
+    cout << "2. Set boundary conditions" << endl;
+    cout << "3. Stimulate the 2D surface at a specific point" << endl;
+    cout << "4. Simulate thermal dissipation" << endl;
+    cout << "5. Print the 2D surface" << endl;
+    cout << "6. Exit the program" << endl;
+
+    char choice;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    cout << endl;
+
+    return choice;
+}
+
 // Function to create a 2D float matrix with given dimensions
 int createMatrix(float **&matrix, int X_dimension, int Y_dimension)
 {
@@ -250,6 +270,7 @@ int MatrixFloatTo8bit(float **&matrix, uint8_t **&eightBitMatrix, int X_dimensio
         }
     }
 
+    // Convert the temperatures to 8-bit values
     for (int i = 0; i < Y_dimension; i++)
     {
         for (int j = 0; j < X_dimension; j++)
