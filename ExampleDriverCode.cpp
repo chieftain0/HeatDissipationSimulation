@@ -176,21 +176,19 @@ int main()
             break;
 
         case '5':
+            if (matrix == nullptr)
+            {
+                cout << "The matrix has not been created yet!!!" << endl;
+                cout << endl;
+                break;
+            }
             cout << "Keep in mind that the matrix can be too large for the screen!!!" << endl;
             cout << "Would you like to see the final matrix? (y/n): ";
             char show;
             cin >> show;
             if (show == 'y')
             {
-                if (matrix != nullptr)
-                {
-                    printMatrix(matrix, X_dimension, Y_dimension);
-                }
-                else
-                {
-                    cout << "The matrix is empty!" << endl;
-                    cout << endl;
-                }
+                printMatrix(matrix, X_dimension, Y_dimension);
             }
             else if (show == 'n')
             {
