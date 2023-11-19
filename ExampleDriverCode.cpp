@@ -64,6 +64,12 @@ int main()
             break;
 
         case '2': // Set boundary values
+            if (matrix == nullptr)
+            {
+                cout << "The matrix has not been created yet!!!" << endl;
+                cout << endl;
+                break;
+            }
             cout << "Now the program will prompt you to set the boundary temperatures" << endl;
             for (int i = 0; i < 4; i++)
             {
@@ -86,6 +92,12 @@ int main()
             break;
 
         case '3': // Set stimulus point
+            if (matrix == nullptr)
+            {
+                cout << "The matrix has not been created yet!!!" << endl;
+                cout << endl;
+                break;
+            }
             cout << "Now the programm will prompt the coordinates of the stimulation point" << endl;
             while (X_coordinate <= 0 || X_coordinate >= X_dimension - 1 || Y_coordinate <= 0 || Y_coordinate >= Y_dimension - 1)
             {
@@ -118,6 +130,12 @@ int main()
             break;
 
         case '4': // Simulate thermal dissipation
+            if (matrix == nullptr)
+            {
+                cout << "The matrix has not been created yet!!!" << endl;
+                cout << endl;
+                break;
+            }
             cout << "Now the program will prompt the simulation threshold to simulate the thermal dissipation" << endl;
             while (threshold <= 0)
             {
@@ -164,10 +182,19 @@ int main()
             cin >> show;
             if (show == 'y')
             {
-                printMatrix(matrix, X_dimension, Y_dimension);
+                if (matrix != nullptr)
+                {
+                    printMatrix(matrix, X_dimension, Y_dimension);
+                }
+                else
+                {
+                    cout << "The matrix is empty!" << endl;
+                    cout << endl;
+                }
             }
             else if (show == 'n')
             {
+                break;
             }
             else
             {
@@ -182,7 +209,8 @@ int main()
         case '6':
             cout << "Goodbye User" << endl;
             deleteMatrix(matrix, X_dimension, Y_dimension);
-            return 0; // Exit the program
+            system("pause");
+            return 0;
             break;
 
         default:
